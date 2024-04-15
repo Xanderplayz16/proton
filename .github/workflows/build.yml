@@ -18,8 +18,8 @@ jobs:
   build:
     strategy:
       matrix:
-        version: [3.9, 3.10, 3.11, 3.12]
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        version: [3.9, '3.10', 3.11, 3.12]
+        os: [windows-2022, windows-2019, macos-14, macos-13, ubuntu-22.04, ubuntu-20.04]
     runs-on: ${{ matrix.os }}
 
     steps:
