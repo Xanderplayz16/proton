@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 jobs:
-  build-win:
+  build-win-311:
 
     runs-on: windows-latest
 
@@ -37,7 +37,7 @@ jobs:
         name: artifacts-win
         path: dist
         
-  build-lin:
+  build-lin-311:
 
     runs-on: ubuntu-latest
 
@@ -47,6 +47,51 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.11"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install hatch
+    - name: Build
+      run: |
+        hatch build
+    - uses: actions/upload-artifact@v4
+      name: "Upload artifacts"
+      with:
+        name: artifacts-lin
+        path: dist
+  build-win-312:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.12"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install hatch
+    - name: Build
+      run: |
+        hatch build
+    - uses: actions/upload-artifact@v4
+      name: "Upload artifacts"
+      with:
+        name: artifacts-win
+        path: dist
+        
+  build-lin-312:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.12"
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
