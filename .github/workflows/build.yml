@@ -14,16 +14,20 @@ permissions:
   contents: read
 
 jobs:
-  build-win-311:
-
-    runs-on: windows-latest
+  
+  build:
+    strategy:
+      matrix:
+        version: [3.9, 3.10, 3.11, 3.12]
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.11
+    - name: Set up Python ${{ matrix.version }}
       uses: actions/setup-python@v3
       with:
-        python-version: "3.11"
+        python-version: ${{ matrix.version }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -34,120 +38,8 @@ jobs:
     - uses: actions/upload-artifact@v4
       name: "Upload artifacts"
       with:
-        name: artifacts-win-311
+        name: artifacts-${{ matrix.os }}-${{ matrix.version }}
         path: dist
         
-  build-lin-311:
 
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.11"
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install hatch
-    - name: Build
-      run: |
-        hatch build
-    - uses: actions/upload-artifact@v4
-      name: "Upload artifacts"
-      with:
-        name: artifacts-lin-311
-        path: dist
-  build-win-312:
-
-    runs-on: windows-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.12
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.12"
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install hatch
-    - name: Build
-      run: |
-        hatch build
-    - uses: actions/upload-artifact@v4
-      name: "Upload artifacts"
-      with:
-        name: artifacts-win-312
-        path: dist
-        
-  build-lin-312:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.12
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.12"
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install hatch
-    - name: Build
-      run: |
-        hatch build
-    - uses: actions/upload-artifact@v4
-      name: "Upload artifacts"
-      with:
-        name: artifacts-lin-312
-        path: dist
-
-  build-win-310:
-
-    runs-on: windows-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install hatch
-    - name: Build
-      run: |
-        hatch build
-    - uses: actions/upload-artifact@v4
-      name: "Upload artifacts"
-      with:
-        name: artifacts-win-310
-        path: dist
-        
-  build-lin-310:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install hatch
-    - name: Build
-      run: |
-        hatch build
-    - uses: actions/upload-artifact@v4
-      name: "Upload artifacts"
-      with:
-        name: artifacts-lin-310
-        path: dist
-
+    
