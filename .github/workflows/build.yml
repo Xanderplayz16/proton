@@ -34,7 +34,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       name: "Upload artifacts"
       with:
-        name: artifacts-win
+        name: artifacts-win-311
         path: dist
         
   build-lin-311:
@@ -57,7 +57,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       name: "Upload artifacts"
       with:
-        name: artifacts-lin
+        name: artifacts-lin-311
         path: dist
   build-win-312:
 
@@ -79,7 +79,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       name: "Upload artifacts"
       with:
-        name: artifacts-win
+        name: artifacts-win-312
         path: dist
         
   build-lin-312:
@@ -102,5 +102,5 @@ jobs:
     - uses: actions/upload-artifact@v4
       name: "Upload artifacts"
       with:
-        name: artifacts-lin
+        name: artifacts-lin-312
         path: dist
