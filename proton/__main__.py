@@ -18,7 +18,7 @@ def init(dir:str="."):
         os.mkdir(dir + "/" + "src")
         os.mkdir(dir + "/" + "web")
         with open(dir + "/" + "src/main.py", "w") as f:
-            f.write("import proton as pt\nwin = pt.Window('A Proton webapp', 'web')\nwin.start(debug=True)\ndocument=pt.Document(win)")
+            f.write("import proton as pt\nwin = pt.Window('A Proton webapp', '../web')\nwin.start(debug=True)\ndocument=pt.Document(win)")
         with open(dir + "/" + "web/index.html", "w") as f:
             f.write("<!DOCTYPE html>\n<body>\n  <h1>Hello, World!</h1>\n</body>\n</html>")
 
