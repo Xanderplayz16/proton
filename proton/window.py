@@ -20,4 +20,5 @@ class Window:
         self.wviewprocess = th.Thread(target=wv.start, kwargs = {"private_mode": True, "debug": debug, "http_port": random.randint(55556, 59999)}, name="MainThread")
         self.wviewprocess.start()
         self.webview.evaluate_js(runpython)
-        
+    def expose(self, func:function):
+        self.webview.expose(func)
