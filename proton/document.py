@@ -1,4 +1,5 @@
 import webview as wv
+from .utils import toObject
 class Document:
     def __init__(self, window):
         self.webview: wv.Window = window.webview
@@ -36,11 +37,23 @@ class Document:
     def contentType(self):
         """Returns the MIME type of the current page."""
         return self.webview.evaluate_js("document.contentType")
-     #TODO: Implement cookie, currentScript, defaultView, designMode and dir.
+     #TODO:defaultView and designMode
+    @property
+    def cookie(self):
+        return self.webview.evaluate_js("document.cookie")
+    @property
+    def currentScript(self):
+        return "PythonScript"
+    @cookie.setter
+    def cookiesetter(self, val):
+        self.webview.evaluate_js("document.cookie = " + val)
+    @property
+    def dir(self):
+        return self.webview.evaluate_js("document.dir")
     @property
     def doctype(self):
-        """Returns the Document Type Declaration (DTD) in a dict."""
-        return self.webview.evaluate_js("document.doctype")
+        """Returns the Document Type Declaration (DTD) in a object."""
+        return toObject(self.webview.evaluate_js("document.doctype"))
     @property
     def documentElement(self):
         """Returns the <html> object."""
@@ -54,7 +67,11 @@ class Document:
     def firstElementChild(self):
         """Returns the <html> object."""
         return self.querySelector("html")
-    #TODO: Implement fonts+
+    #TODO: Implement forms+
+    @property
+    def fonts(self):
+        """Returns all of the fonts."""
+        return toObject(self.webview.evaluate_js("document.fonts"))
     def append(self, element):
         """Appends an object to the document. Accepts any object with an __str__ function."""
         self.webview.dom.document.append(element)
