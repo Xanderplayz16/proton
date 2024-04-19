@@ -29,13 +29,17 @@ def error(text:str):
 def build(mode:str):
     """Build your project."""
     with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), transient=True) as progress:
+        try:
+            shutil.rmtree("dist")
+        except Exception:
+            pass
         progress.add_task("Building...", total = 2)
         print("")
         print("")
         if mode == "debug":
-            p = sp.Popen("python -m nuitka src/main.py --standalone --nofollow-import-to=cefpython3 --enable-console", shell=True)
+            p = sp.Popen("python -m nuitka src/main.py --standalone --nofollow-import-to=cefpython3 --enable-console", shell=True, stdout = sp.PIPE)
         elif mode == "release":
-            p = sp.Popen("python -m nuitka src/main.py --standalone --nofollow-import-to=cefpython3 --disable-console", shell=True)
+            p = sp.Popen("python -m nuitka src/main.py --standalone --nofollow-import-to=cefpython3 --disable-console", shell=True, stdout = sp.PIPE)
         else:
             error("[white]Mode " + mode + " does not exist, quitting.\nUse build debug or build release. (debug enables the console, while release doesn't.)")
             
