@@ -45,4 +45,4 @@ jobs:
       name: "Upload artifacts"
       with:
         name: artifacts-${{ matrix.os }}-${{ matrix.version }}
-        path: dist
+        path: examples/example_project/dist
