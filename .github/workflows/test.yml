@@ -37,12 +37,10 @@ jobs:
         pip install pywebview[qt]
         pip install typer
         pip install nuitka
-        echo "export PYTHONPATH=$PYTHONPATH:$(pwd)" | bash
+        
     - name: Build
       run: |
-        cd examples
-        cd example_project
-        python -m proton build
+        echo "export PYTHONPATH=$PYTHONPATH:$(pwd) && cd examples && cd example_project && python -m proton build" | bash
     - uses: actions/upload-artifact@v4
       name: "Upload artifacts"
       with:
