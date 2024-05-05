@@ -1,4 +1,4 @@
-# This workflow will build Proton on Windows and Linux, with python 3.10, 3.11 and 3.12.
+# This workflow will build a Proton app on Windows and Linux, with Python 3.9, 3.10, 3.11 and 3.12.
 
 
 name: Test
@@ -37,7 +37,7 @@ jobs:
         pip install pywebview[qt]
         pip install typer
         pip install nuitka
-        echo "export PYTHONPATH = $PYTHONPATH:$(pwd)" | bash
+        echo "export PYTHONPATH=$PYTHONPATH:$(pwd)" | bash
     - name: Build
       run: |
         cd examples
