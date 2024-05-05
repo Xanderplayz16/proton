@@ -1,6 +1,6 @@
 site_name: Proton
 repo_name: Proton
-repo_url: https://github.com/Xanderplayz16/proton/tree/master
+repo_url: https://github.com/Xanderplayz16/proton/
 edit_uri: edit/master/docs/docs
 theme:
   name: material
