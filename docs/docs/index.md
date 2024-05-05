@@ -1,2 +1,2 @@
 # About Proton
-Proton is a high-level, easy to use and modern web-application framework. 
+Proton is a blazingly fast, modern, easy-to-use and lightweight HTML5 desktop application framework, similar to Electron.
