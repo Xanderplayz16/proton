@@ -37,7 +37,7 @@ jobs:
         pip install pywebview[qt]
         pip install typer
         pip install nuitka
-        PYTHONPATH = $PYTHONPATH:$(pwd)
+        echo "export PYTHONPATH = $PYTHONPATH:$(pwd)" | bash
     - name: Build
       run: |
         cd examples
