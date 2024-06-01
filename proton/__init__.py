@@ -1,3 +1,6 @@
+from .patches import patch
+patch("p_bottle")
+
 import webview as wv
 from .window import Window
 from .document import Document

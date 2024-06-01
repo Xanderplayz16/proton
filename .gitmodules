@@ -1,0 +1,3 @@
+[submodule "proton/patches/bottle_fake"]
+	path = proton/patches/bottle_fake
+	url = https://github.com/Xanderplayz16/bottle.git
