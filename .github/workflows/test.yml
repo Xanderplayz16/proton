@@ -34,13 +34,14 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pywebview[qt]
+        pip install pywebview[gtk]
         pip install typer
         pip install nuitka
+        pip install requests
         
     - name: Build
       run: |
-        echo "export PYTHONPATH=$PYTHONPATH:$(pwd) && cd examples && cd example_project && python -m proton build debug" | bash
+        echo "export PYTHONPATH=$PYTHONPATH:$(pwd) && cd examples && cd example_project && python -m proton build --verbose" | bash
     - uses: actions/upload-artifact@v4
       name: "Upload artifacts"
       with:
