@@ -1,9 +1,5 @@
-from .patches import patch
-patch("p_bottle")
-
-import webview as wv
+from .patches.p_bottle import __patch__ as bottle_patch
 from .window import Window
-from .document import Document
-import os, sys
+bottle_patch()
 __version__ = "0.1.1"
 #wv.DRAG_REGION_SELECTOR = "drag-region"

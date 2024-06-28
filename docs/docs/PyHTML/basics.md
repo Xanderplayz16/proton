@@ -1,5 +1,5 @@
 # Basics
-PyHTML is an implementation to run Python in a Proton app, similar to Brython.
+PyHTML is an implementation to run Python in a Proton app, similar to [Brython](https://brython.info/).
 A python script is defined using the `text/python` MIME type, applied to a script.
 
 Example:

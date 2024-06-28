@@ -1,7 +1,11 @@
+from urllib.parse import urlparse
 def remove_indentation(text):
     lines = text.split('\n')  # Split the text into lines
+    index = 0
+    if len(lines) >= 2:
+       index = 1 
     if lines:
-        first_line_indent = len(lines[1]) - len(lines[1].lstrip())  # Get the amount of indentation in the first line
+        first_line_indent = len(lines[index]) - len(lines[index].lstrip())  # Get the amount of indentation in the first line
         modified_lines = [line[first_line_indent:] for line in lines]  # Remove indentation from each line
         result = '\n'.join(modified_lines)  # Join the modified lines back together
         return result
@@ -20,3 +24,9 @@ def toObject(dic: dict):
     o.__dict__ = dic
     return o
 
+def is_url(url):
+  try:
+    result = urlparse(url)
+    return all([result.scheme, result.netloc])
+  except ValueError:
+    return False

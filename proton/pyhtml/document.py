@@ -1,6 +1,6 @@
 import webview as wv
-from .utils import toObject
-class Document:
+from ..utils import toObject
+class Document: # TODO: Implement the -Nss- -Ns's- NSs'?
     def __init__(self, window):
         self.webview: wv.Window = window.webview
     @property
@@ -37,7 +37,13 @@ class Document:
     def contentType(self):
         """Returns the MIME type of the current page."""
         return self.webview.evaluate_js("document.contentType")
-     #TODO:defaultView and designMode
+     #TODO:defaultView
+    @property
+    def designMode(self):
+        return self.webview.evaluate_js('document.designMode')
+    @designMode.setter
+    def designModeSetter(self, val: str):
+        self.webview.evaluate_js('document.designMode = ' + val)
     @property
     def cookie(self):
         return self.webview.evaluate_js("document.cookie")
@@ -68,21 +74,26 @@ class Document:
         """Returns the <html> object."""
         return self.querySelector("html")
     #TODO: Implement forms+
+    
     @property
     def fonts(self):
         """Returns all of the fonts."""
         return toObject(self.webview.evaluate_js("document.fonts"))
+    @property
+    def forms(self):
+        return self.querySelectorAll("form")
     def append(self, element):
         """Appends an object to the document. Accepts any object with an __str__ function."""
         self.webview.dom.document.append(element)
     def createElement(self, html):
         """Creates an element."""
         return self.webview.dom.create_element(html)
-    #TODO: Implement createElementNS
     def getElementById(self, id):
         """Returns the elements with the specified name."""
-        return self.webview.dom.get_element("#" + id)
+        return self.querySelectorAll("#" + id)
     def getElementsByName(self, name):
         """Returns the elements with the specified name."""
-        return self.webview.dom.get_elements(f"[name={name}]")
-    #TODO: Implement getElementsByTagName(NS)
+        return self.querySelectorAll(f"[name={name}]")
+    def getElementsByTagName(self, name):
+        """Returns the elements with the specificed tag name."""
+        return self.querySelectorAll(name)
