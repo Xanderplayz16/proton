@@ -30,6 +30,7 @@ class Window:
                 pass
         self.webview.expose(evalpy)
         self.webview.expose(evalpy_url)
+    
     def start(self, debug:bool = False, gui:str = "edgechromium"):
         """Starts the window."""
         self.port = random.randint(55556, 59999)
@@ -38,3 +39,34 @@ class Window:
         self.webview.evaluate_js(runpython)
     def expose(self, func):
         self.webview.expose(func)
+    def __del__(self):
+        self.webview.destroy()
+    def minimize(self):
+        self.webview.minimize()
+    def maximize(self):
+        self.webview.maximize()
+    @property
+    def draggable(self):
+        return self.webview.draggable
+    @property
+    def html(self):
+        return self.webview.html
+    @property
+    def on_top(self):
+        return self.webview.on_top
+    def hide(self):
+        self.webview.hide()
+    def show(self):
+        self.webview.show()
+    @property
+    def hidden(self):
+        return self.webview.hidden
+    def setsize(self, width: int, height: int):
+        self.webview.set_window_size(width, height)
+    @property
+    def height(self):
+        return self.webview.height
+    @property
+    def width(self):
+        return self.webview.width
+    
