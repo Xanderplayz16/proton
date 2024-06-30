@@ -33,6 +33,8 @@ jobs:
         python-version: ${{ matrix.version }}
     - name: Install dependencies
       run: |
+        if [ "$RUNNER_OS" == "Linux" ]; then
+          sudo apt install libgirepository1.0-dev 
         python -m pip install --upgrade pip
         pip install pywebview[gtk]
         pip install typer
