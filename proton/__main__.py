@@ -28,7 +28,7 @@ def error(text:str):
     rprint(Panel(text, title="[red]Error", title_align="left", style=rich.style.Style(color = "red")))
 
 @projectapp.command()
-def build(mode:str, disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = True, disable_console: bool = True):
+def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = True, disable_console: bool = True):
     """Build your project."""
     with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), transient=True) as progress:
         extra_args = ""
