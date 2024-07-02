@@ -1,3 +1,4 @@
+import shutil, os
 from urllib.parse import urlparse
 def remove_indentation(text):
     lines = text.split('\n')  # Split the text into lines
@@ -30,3 +31,9 @@ def is_url(url):
     return all([result.scheme, result.netloc])
   except ValueError:
     return False
+
+def remove_files(path: str) -> None:
+    try:
+        shutil.rmtree(path)
+    except NotADirectoryError:
+        os.remove(path)

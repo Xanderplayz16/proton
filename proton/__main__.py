@@ -4,6 +4,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 import subprocess as sp
 from rich.panel import Panel
 from rich import print as rprint
+from .utils import remove_files
 app = typer.Typer()
 projectapp = typer.Typer(help="Project management.")
 app.add_typer(projectapp, name="project")
@@ -28,10 +29,12 @@ def error(text:str):
     rprint(Panel(text, title="[red]Error", title_align="left", style=rich.style.Style(color = "red")))
 
 @projectapp.command()
-def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = True, disable_console: bool = True):
+def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = True, disable_console: bool = True, enable_experimental_bloat_removal: bool = False):
     """Build your project."""
     with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), transient=True) as progress:
         extra_args = ""
+        if enable_experimental_bloat_removal:
+            print('WARNING: You are using experimental bloat removal. This may cause all kinds of issues.')
         if disable_qt:
             extra_args += '--nofollow-import-to=PySide6 --nofollow-import-to=qtpy --nofollow-import-to=PySide2 '
         else:
@@ -75,6 +78,11 @@ def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = Tr
         shutil.rmtree("main.build")
         shutil.move("main.dist", "dist")
         shutil.copytree("web", "dist/web")
+
+        if enable_experimental_bloat_removal:
+            files = "libncursesw.so.6 libssl.so.3 libuuid.so.1 libbz2.so.1.0 libgcc_s.so.1 libcrypto.so.3 libpcre2-8.so.0 gevent girepository greenlet cryptography _brotli.so libglib-2.0.so.0"
+            for i in files.split(' '):
+                remove_files("dist/"+i)
         
     print("Done!")
         
