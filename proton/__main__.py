@@ -64,7 +64,7 @@ def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = Tr
                 print(prev.decode()[:-1])
                 prev = b''
         if p.poll() != 0:
-            print('Nuitka exited with error code '+str(p.poll()))
+            print('ERROR: Nuitka exited with non-zero exit code '+str(p.poll()))
             exit(51)
         
         
