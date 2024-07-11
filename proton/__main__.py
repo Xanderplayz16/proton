@@ -9,8 +9,15 @@ app = typer.Typer()
 projectapp = typer.Typer(help="Project management.")
 app.add_typer(projectapp, name="project")
 
+def error(text:str):
+    rprint(Panel(text, title="[red]Error", title_align="left", style=rich.style.Style(color = "red")))
+
 @projectapp.command()
 def run():
+    if '__compiled__' in globals():
+        error('Running from compiled executable.\nThis could cause Proton to call the compiled that calls Proton... etc.\nThis is basically a forkbomb.')
+        return
+        
     os.system(f"{sys.executable} src/main.py")
 
 @projectapp.command()
@@ -25,8 +32,7 @@ def init(dir:str="."):
         with open(os.path.join(dir, 'web', 'index.html'), "w") as f:
             f.write("<!DOCTYPE html>\n<body>\n  <h1>Hello, World!</h1>\n</body>\n</html>")
 
-def error(text:str):
-    rprint(Panel(text, title="[red]Error", title_align="left", style=rich.style.Style(color = "red")))
+
 
 @projectapp.command()
 def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = True, disable_console: bool = True, enable_experimental_bloat_removal: bool = False):
