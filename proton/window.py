@@ -4,6 +4,7 @@ from .pyhtml.generate_globals import generateGlobals
 import hashlib
 import random
 import requests
+import typing
 from .utils import remove_indentation, is_url
 from .pyhtml.document import Document
 from .js import runpython
@@ -69,4 +70,9 @@ class Window:
     @property
     def width(self):
         return self.webview.width
+    def destroy(self):
+        self.webview.destroy()
+    def evaluate_js(self, script: str, callback: typing.Callable | None = None):
+        return self.webview.evaluate_js(script=script, callback=callback)
+
     
