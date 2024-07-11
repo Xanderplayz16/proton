@@ -70,8 +70,6 @@ class Window:
     @property
     def width(self):
         return self.webview.width
-    def destroy(self):
-        self.webview.destroy()
     def evaluate_js(self, script: str, callback: typing.Callable | None = None):
         return self.webview.evaluate_js(script=script, callback=callback)
 
