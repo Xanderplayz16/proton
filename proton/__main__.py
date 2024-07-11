@@ -18,11 +18,11 @@ def init(dir:str="."):
     """Initalizes a new project."""
     with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), transient=True) as progress:
         progress.add_task("Creating project...")
-        os.mkdir(dir + "/" + "src")
-        os.mkdir(dir + "/" + "web")
-        with open(dir + "/" + "src/main.py", "w") as f:
+        os.mkdir(os.path.join(dir, 'src'))
+        os.mkdir(os.path.join(dir, 'web'))
+        with open(os.path.join(dir, 'src', 'main.py')) as f:
             f.write("import proton as pt\nwin = pt.Window('A Proton webapp', '../web')\nwin.start(debug=True)\ndocument=win.document")
-        with open(dir + "/" + "web/index.html", "w") as f:
+        with open(os.path.join(dir, 'web', 'index.html'), "w") as f:
             f.write("<!DOCTYPE html>\n<body>\n  <h1>Hello, World!</h1>\n</body>\n</html>")
 
 def error(text:str):

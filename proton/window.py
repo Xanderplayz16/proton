@@ -5,6 +5,7 @@ import hashlib
 import random
 import requests
 import typing
+import os
 from .utils import remove_indentation, is_url
 from .pyhtml.document import Document
 from .js import runpython
@@ -13,7 +14,7 @@ class Window:
     document: Document
     def __init__(self, name, path, frameless:bool=False, easy_drag:bool=False):
         #wv.DRAG_REGION_SELECTOR = "drag-region"
-        self.webview = wv.create_window(name, f"{path}/index.html", frameless=frameless, easy_drag=easy_drag)
+        self.webview = wv.create_window(name, os.path.join(path, 'index.html'), frameless=frameless, easy_drag=easy_drag)
         self._globals = generateGlobals(self) 
         self.document = self._globals["document"]
         def evalpy(script):
