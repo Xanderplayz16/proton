@@ -35,11 +35,13 @@ jobs:
       run: |
         if [ "$RUNNER_OS" == "Linux" ]; then
           sudo apt install libgirepository1.0-dev 
+        fi
         python -m pip install --upgrade pip
         pip install pywebview[gtk]
         pip install typer
         pip install nuitka
         pip install requests
+      shell: bash
         
     - name: Build
       run: |
