@@ -5,7 +5,7 @@ null_lambda = lambda *args, **kwargs: None
 
 
 
-def remove_indentation(text):
+def remove_indentation(text) -> str:
     lines = text.split('\n')  # Split the text into lines
     index = 0
     if len(lines) >= 2:
@@ -22,15 +22,14 @@ class Object():
         return f"Object ({self.__dict__})"
     def __repr__(self):
         return f"Object ({self.__dict__})"
-    def __dict__(self):
-        return self.__dict__
+    
 
 def toObject(dic: dict):
     o = Object()
     o.__dict__ = dic
     return o
 
-def is_url(url):
+def is_url(url) -> bool:
   try:
     result = urlparse(url)
     return all([result.scheme, result.netloc])

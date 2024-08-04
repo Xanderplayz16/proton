@@ -9,31 +9,41 @@ from .js import runpython
 
 
 class Window:
-    document: Document
-    def __init__(self, name, path, frameless:bool=False, easy_drag:bool=False):
+    
+    def __init__(self, name, path, frameless:bool=False, easy_drag:bool=False) -> None:
         #wv.DRAG_REGION_SELECTOR = "drag-region"
         self.webview = wv.create_window(name, os.path.join(path, 'index.html'), frameless=frameless, easy_drag=easy_drag)
         self._globals = generateGlobals(self) 
         self.document = self._globals["document"]
-        def _evalpy(script):
+        def _evalpy(script: str) -> None:
             print(f"Running script {hashlib.sha1(script.encode()).hexdigest()[:7]}")
             #print(remove_indentation(script))
             exec(remove_indentation(script), self._globals)
-        def _evalpy_url(url):
+        def _evalpy_url(url: str) -> None:
             if is_url(url):
                 r = requests.get(url)
                 if r.status_code == 200:
-                    script = r.content.decode()
+                    script: str = r.content.decode()
                     print(f"Running script {hashlib.sha1(script.encode()).hexdigest()[:7]}")
                     exec(remove_indentation(script), self._globals)
             else:
-                pass
+                if url.startswith('/'):
+                    # Absolute path
+                    host: str = self.webview.evaluate_js('location.host')
+                    protocol: str = self.webview.evaluate_js('location.protocol')
+                    r = requests.get(f"{protocol}//{host}{url}")
+                    if r.status_code == 200:
+                        script = r.content.decode()
+                        print(f"Running script {hashlib.sha1(script.encode()).hexdigest()[:7]}")
+                        exec(remove_indentation(script), self._globals)
+                else:
+                    pass
         _evalpy.__name__ = "evalpy"
         _evalpy_url.__name__ = "evalpy_url"
         self.webview.expose(_evalpy)
         self.webview.expose(_evalpy_url)
     
-    def start(self, debug:bool = False, gui:str = "edgechromium"):
+    def start(self, debug:bool = False, gui:str = "edgechromium") -> None:
         """
         Starts the window.
         NOTE: THIS WILL DISABLE SIGNALS FOR ~20 MILLISECONDS AFTER THIS IF USING GTK!

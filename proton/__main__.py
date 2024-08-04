@@ -88,7 +88,11 @@ def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = Tr
         if enable_experimental_bloat_removal:
             files = "libncursesw.so.6 libssl.so.3 libuuid.so.1 libbz2.so.1.0 libgcc_s.so.1 libcrypto.so.3 libpcre2-8.so.0 gevent girepository greenlet cryptography _brotli.so libglib-2.0.so.0"
             for i in files.split(' '):
-                remove_files("dist/"+i)
+                try:
+                    remove_files("dist/"+i)
+                except FileNotFoundError:
+                    if verbose:
+                        print(f'Experimental bloat removal: File {i} does not exist!')
         
     print("Done!")
         
