@@ -11,10 +11,10 @@ class Document: # TODO: Implement the -Nss- -Ns's- NSs'?
     def head(self):
         """Returns the <head> object."""
         return self.querySelector("head")
-    def querySelector(self, selector):
+    def querySelector(self, selector) -> list:
         """Returns the first object that matches the selector."""
         return self.webview.dom.get_elements(selector)[0]
-    def querySelectorAll(self, selector):
+    def querySelectorAll(self, selector) -> list:
         """Returns all of the objects that match the selector."""
         return self.webview.dom.get_elements(selector)
     @property
@@ -42,7 +42,7 @@ class Document: # TODO: Implement the -Nss- -Ns's- NSs'?
     def designMode(self) -> str:
         return self.webview.evaluate_js('document.designMode')
     @designMode.setter
-    def designModeSetter(self, val: str) -> None    :
+    def designModeSetter(self, val: str) -> None:
         self.webview.evaluate_js('document.designMode = ' + val)
     @property
     def cookie(self) -> str:
@@ -51,7 +51,7 @@ class Document: # TODO: Implement the -Nss- -Ns's- NSs'?
     def currentScript(self) -> str:
         return "PythonScript"
     @cookie.setter
-    def cookiesetter(self, val):
+    def cookiesetter(self, val) -> None:
         self.webview.evaluate_js("document.cookie = " + val)
     @property
     def dir(self):

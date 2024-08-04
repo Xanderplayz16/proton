@@ -1,11 +1,11 @@
-import shutil, os, time
+import shutil, os, hashlib
 import threading as th
 from urllib.parse import urlparse
 null_lambda = lambda *args, **kwargs: None
 
 
-
-def remove_indentation(text) -> str:
+get_hash = lambda text: hashlib.sha1(text.encode()).hexdigest()[:7]
+def remove_indentation(text: str) -> str:
     lines = text.split('\n')  # Split the text into lines
     index = 0
     if len(lines) >= 2:
@@ -29,7 +29,7 @@ def toObject(dic: dict):
     o.__dict__ = dic
     return o
 
-def is_url(url) -> bool:
+def is_url(url: str) -> bool:
   try:
     result = urlparse(url)
     return all([result.scheme, result.netloc])

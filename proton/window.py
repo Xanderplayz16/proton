@@ -3,7 +3,7 @@ import threading as th
 import requests, os, random, hashlib, time, signal
 from typing import Callable, Any
 from .pyhtml.generate_globals import generateGlobals
-from .utils import remove_indentation, is_url, null_lambda
+from .utils import remove_indentation, is_url, null_lambda, get_hash
 from .pyhtml.document import Document
 from .js import runpython
 
@@ -16,7 +16,7 @@ class Window:
         self._globals = generateGlobals(self) 
         self.document = self._globals["document"]
         def _evalpy(script: str) -> None:
-            print(f"Running script {hashlib.sha1(script.encode()).hexdigest()[:7]}")
+            print(f"Running script {get_hash(script)}")
             #print(remove_indentation(script))
             exec(remove_indentation(script), self._globals)
         def _evalpy_url(url: str) -> None:
@@ -24,7 +24,7 @@ class Window:
                 r = requests.get(url)
                 if r.status_code == 200:
                     script: str = r.content.decode()
-                    print(f"Running script {hashlib.sha1(script.encode()).hexdigest()[:7]}")
+                    print(f"Running script {get_hash(script)}")
                     exec(remove_indentation(script), self._globals)
             else:
                 if url.startswith('/'):
@@ -34,7 +34,7 @@ class Window:
                     r = requests.get(f"{protocol}//{host}{url}")
                     if r.status_code == 200:
                         script = r.content.decode()
-                        print(f"Running script {hashlib.sha1(script.encode()).hexdigest()[:7]}")
+                        print(f"Running script {get_hash(script)}")
                         exec(remove_indentation(script), self._globals)
                 else:
                     pass
@@ -42,6 +42,7 @@ class Window:
         _evalpy_url.__name__ = "evalpy_url"
         self.webview.expose(_evalpy)
         self.webview.expose(_evalpy_url)
+        
     
     def start(self, debug:bool = False, gui:str = "edgechromium") -> None:
         """
@@ -67,12 +68,12 @@ class Window:
         self.webview.expose(func)
     def __del__(self):
         self.webview.destroy()
-    def minimize(self):
+    def minimize(self) -> None:
         """
         Minimize the webview window.
         """
         self.webview.minimize()
-    def maximize(self):
+    def maximize(self) -> None:
         """
         Maximize the webview window.
         """
@@ -127,9 +128,11 @@ class Window:
         return self.webview.width
     def evaluate_js(self, script: str, callback: Callable | None = None) -> Any:
         """
-        Evaluates the given javascript, and calls callback when any promises were completed.
+        Evaluates the given javascript, and calls callback when any promises were resolved.
         """
         return self.webview.evaluate_js(script=script, callback=callback)
         
+    @property
+    def events(self): return self.webview.events
 
     
