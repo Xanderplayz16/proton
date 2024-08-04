@@ -1,5 +1,10 @@
-import shutil, os
+import shutil, os, time
+import threading as th
 from urllib.parse import urlparse
+null_lambda = lambda *args, **kwargs: None
+
+
+
 def remove_indentation(text):
     lines = text.split('\n')  # Split the text into lines
     index = 0
