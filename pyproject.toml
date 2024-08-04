@@ -20,7 +20,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dependencies = ["pywebview[gtk]", "typer", "nuitka", "pyside6", "requests", "rich", "qtpy"]
+dependencies = ["pywebview[gtk]", "typer", "nuitka", "requests", "rich"]
 keywords = ["webview", "ui", "pywebview", "eel", "html", "css", "js", "javascript"]
 [project.urls]
 Homepage = "https://github.com/Xanderplayz16/proton"
