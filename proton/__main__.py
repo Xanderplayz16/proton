@@ -80,9 +80,14 @@ def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = Fa
         #    os.mkdir("dist")
         #except FileExistsError:
         #    pass
+        
         shutil.rmtree("main.build")
-        shutil.move("main.dist", "dist")
-        shutil.copytree("web", "dist/web")
+        if platform.system() == "Darwin":
+            os.mkdir("dist")
+            shutil.copytree("main.app", "dist")
+        else:
+            shutil.move("main.dist", "dist")
+            shutil.copytree("web", "dist/web")
 
         if enable_experimental_bloat_removal:
             files = "libncursesw.so.6 libssl.so.3 libuuid.so.1 libbz2.so.1.0 libgcc_s.so.1 libcrypto.so.3 libpcre2-8.so.0 gevent girepository greenlet cryptography _brotli.so libglib-2.0.so.0"

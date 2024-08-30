@@ -51,7 +51,11 @@ jobs:
         
     - name: Build
       run: |
-        echo "export PYTHONPATH=$PYTHONPATH:$(pwd) && cd examples && cd example_project && python -m proton project build --verbose" | bash
+        export PYTHONPATH=$PYTHONPATH:$(pwd) 
+        cd examples 
+        cd example_project 
+        python -m proton project build
+      shell: bash
     - uses: actions/upload-artifact@v4
       name: "Upload artifacts"
       with:
