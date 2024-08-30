@@ -1,5 +1,5 @@
 import rich.style
-import typer, os, shutil, rich, sys
+import typer, os, platform, shutil, rich, sys
 from rich.progress import Progress, SpinnerColumn, TextColumn
 import subprocess as sp
 from rich.panel import Panel
@@ -51,6 +51,9 @@ def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = Fa
             extra_args += '--verbose '
         if disable_console and os.name == 'nt': # Disabling the console does nothing on non-Windows systems.
             extra_args += '--disable-console '
+        if platform.system() == "Darwin":
+            # macos
+            extra_args += '--macos-create-app-bundle '
         try:
             shutil.rmtree("dist")
         except Exception:
