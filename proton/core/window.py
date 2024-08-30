@@ -1,61 +1,35 @@
 import webview as wv
 import threading as th
-import requests, os, random, hashlib, time, signal
+import os, random, time, signal
 from typing import Callable, Any
-from .pyhtml.generate_globals import generateGlobals
-from .utils import remove_indentation, is_url, null_lambda, get_hash
-from .pyhtml.document import Document
+from ..pyhtml.generate_globals import generateGlobals
+from ..pyhtml import PyHTMLContext
+from .utils import null_lambda
 from .js import runpython
 
 
 class Window:
-    
-    def __init__(self, name, path, frameless:bool=False, easy_drag:bool=False) -> None:
-        #wv.DRAG_REGION_SELECTOR = "drag-region"
+    def __init__(self, name, path, frameless: bool = False, easy_drag: bool = False) -> None:
         self.webview = wv.create_window(name, os.path.join(path, 'index.html'), frameless=frameless, easy_drag=easy_drag)
-        self._globals = generateGlobals(self) 
+        self._globals = generateGlobals(self)
         self.document = self._globals["document"]
-        def _evalpy(script: str) -> None:
-            print(f"Running script {get_hash(script)}")
-            #print(remove_indentation(script))
-            exec(remove_indentation(script), self._globals)
-        def _evalpy_url(url: str) -> None:
-            if is_url(url):
-                r = requests.get(url)
-                if r.status_code == 200:
-                    script: str = r.content.decode()
-                    print(f"Running script {get_hash(script)}")
-                    exec(remove_indentation(script), self._globals)
-            else:
-                if url.startswith('/'):
-                    # Absolute path
-                    host: str = self.webview.evaluate_js('location.host')
-                    protocol: str = self.webview.evaluate_js('location.protocol')
-                    r = requests.get(f"{protocol}//{host}{url}")
-                    if r.status_code == 200:
-                        script = r.content.decode()
-                        print(f"Running script {get_hash(script)}")
-                        exec(remove_indentation(script), self._globals)
-                else:
-                    pass
-        _evalpy.__name__ = "evalpy"
-        _evalpy_url.__name__ = "evalpy_url"
-        self.webview.expose(_evalpy)
-        self.webview.expose(_evalpy_url)
+        self.pycontext = PyHTMLContext(self,self._globals)
         
+        self.pycontext.expose()
     
-    def start(self, debug:bool = False, gui:str = "edgechromium") -> None:
+    def start(self, debug: bool = False, gui: str = "edgechromium") -> None:
         """
         Starts the window.
-        NOTE: THIS WILL DISABLE SIGNALS FOR ~20 MILLISECONDS AFTER THIS IF USING GTK!
+        NOTE: THIS WILL DISABLE SIGNALS FOR ~200 MILLISECONDS AFTER THIS IF USING GTK!
         """
         self.port = random.randint(55556, 59999)
         self.wviewprocess = th.Thread(target=(lambda: wv.start(private_mode=True, debug=debug, http_port=self.port, gui=gui)), name="MainThread")
         if gui == "gtk":
-            signal.signal = null_lambda
             signal_func = signal.signal
+            signal.signal = null_lambda
+            
             def _reenable_signals():
-                time.sleep(0.020)
+                time.sleep(0.200)
                 signal.signal = signal_func
             th.Thread(target=_reenable_signals).start()
         self.wviewprocess.start()
@@ -66,6 +40,7 @@ class Window:
         Exposes a Python function to Javascript.
         """
         self.webview.expose(func)
+        return func
     def __del__(self):
         self.webview.destroy()
     def minimize(self) -> None:
@@ -133,6 +108,10 @@ class Window:
         return self.webview.evaluate_js(script=script, callback=callback)
         
     @property
-    def events(self): return self.webview.events
+    def events(self): 
+        """
+        Returns a container containing all of the DOM events.
+        """
+        return self.webview.events
 
     

@@ -4,7 +4,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 import subprocess as sp
 from rich.panel import Panel
 from rich import print as rprint
-from .utils import remove_files
+from .core.utils import remove_files
 app = typer.Typer()
 projectapp = typer.Typer(help="Project management.")
 app.add_typer(projectapp, name="project")
@@ -35,12 +35,12 @@ def init(dir:str="."):
 
 
 @projectapp.command()
-def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = True, disable_console: bool = True, enable_experimental_bloat_removal: bool = False):
+def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = False, disable_console: bool = True, enable_experimental_bloat_removal: bool = False):
     """Build your project."""
     with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), transient=True) as progress:
         extra_args = ""
         if enable_experimental_bloat_removal:
-            print('WARNING: You are using experimental bloat removal. This may cause all kinds of issues.')
+            print('WARNING: You are using experimental bloat removal, and this may cause all kinds of issues.')
         if disable_qt:
             extra_args += '--nofollow-import-to=PySide6 --nofollow-import-to=qtpy --nofollow-import-to=PySide2 '
         else:
@@ -49,7 +49,7 @@ def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = Tr
             extra_args += '--nofollow-import-to=gi '
         if verbose:
             extra_args += '--verbose '
-        if disable_console:
+        if disable_console and os.name == 'nt': # Disabling the console does nothing on non-Windows systems.
             extra_args += '--disable-console '
         try:
             shutil.rmtree("dist")
@@ -61,10 +61,6 @@ def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = Tr
         
         
         p = sp.Popen(f"python -m nuitka src/main.py --standalone --nofollow-import-to=cefpython3 --nofollow-import-to=kivy --nofollow-import-to=jnius --nofollow-import-to=PyQt5 {extra_args} 2>&1", shell=True, stdout = sp.PIPE, stderr = sp.DEVNULL)
-        #else:
-        #    error("[white]Build mode " + mode + " does not exist, quitting.\nUse build mode debug or release. (debug enables the console, while release doesn't, but release enables optimizations.)")
-        #    
-        #    exit()
         prev = b''
         while p.poll() == None:
             a = p.stdout.read(1)
