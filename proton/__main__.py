@@ -84,7 +84,7 @@ def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = Fa
         shutil.rmtree("main.build")
         if platform.system() == "Darwin":
             os.mkdir("dist")
-            shutil.copytree("main.app", "dist")
+            shutil.copytree("main.app", "dist/main.app")
         else:
             shutil.move("main.dist", "dist")
             shutil.copytree("web", "dist/web")
