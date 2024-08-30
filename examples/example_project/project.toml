@@ -1,2 +1,12 @@
 [proton]
 entrypoint = "src/main.py"
+
+[proton.build]
+verbose = false
+windows_disable_console = true
+datafiles = ["web"]
+
+[proton.build.bloat]
+disable_qt = true
+disable_gtk = false
+experimental_bloat_removal = true
