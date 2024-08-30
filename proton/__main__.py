@@ -84,7 +84,10 @@ def build(disable_qt: bool = True, disable_gtk: bool = False, verbose: bool = Fa
         shutil.rmtree("main.build")
         if platform.system() == "Darwin":
             os.mkdir("dist")
-            shutil.copytree("main.app", "dist/main.app")
+            app = [i for i in os.listdir if i.endswith(".app")][0]
+            shutil.copytree(app, os.path.join('dist', app))
+            shutil.copytree('web', os.path.join('dist', app, 'Contents', 'MacOS', 'web'))
+            shutil.rmtree(app)
         else:
             shutil.move("main.dist", "dist")
             shutil.copytree("web", "dist/web")
