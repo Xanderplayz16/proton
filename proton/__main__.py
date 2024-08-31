@@ -31,6 +31,19 @@ def init(dir:str="."):
             f.write("import proton as pt\nwin = pt.Window('A Proton webapp', '../web')\nwin.start(debug=True)\ndocument=win.document")
         with open(os.path.join(dir, 'web', 'index.html'), "w") as f:
             f.write("<!DOCTYPE html>\n<body>\n  <h1>Hello, World!</h1>\n</body>\n</html>")
+        with open(os.path.join(dir, 'project.toml'), 'w') as f:
+            f.write("""[proton]
+                    entrypoint = "src/main.py"
+                    
+                    [proton.build]
+                    verbose = false
+                    windows_disable_console = true
+                    datafiles = ["web"]
+                    
+                    [proton.build.bloat]
+                    disable_qt = true
+                    disable_gtk = false
+                    experimental_bloat_removal = true""")
 
 
 
